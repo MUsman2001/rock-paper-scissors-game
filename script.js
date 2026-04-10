@@ -1,3 +1,14 @@
+const rockBtn = document.getElementById("rock");
+const paperBtn = document.getElementById("paper");
+const scissorsBtn = document.getElementById("scissors");
+const outcomeTxt = document.querySelector('.round-outcome');
+const scoreTxt = document.querySelector('.score-display');
+const winnerTxt = document.querySelector('#final-winner');
+
+rockBtn.addEventListener("click",() => playRound('rock', getComputerChoice()));
+paperBtn.addEventListener("click",() => playRound('paper', getComputerChoice()));
+scissorsBtn.addEventListener("click",() => playRound('scissors', getComputerChoice()));
+
 let humanScore = 0;
 let computerScore = 0;
 
@@ -8,42 +19,24 @@ const getComputerChoice = () => {
     return 'scissors';
 }
 
-const getHumanChoice = () => {
-    let userInput = prompt("Enter your choice i.e. rock, paper, or scissors").toLowerCase();
-    return userInput;
-}
-
 const playRound =(humanChoice, computerChoice) => {
+    if(humanChoice === 5 || computerChoice === 5) return;
     if(humanChoice === computerChoice){
-        return 'It is a Tie';
-    } else if((humanChoice === "rock" && computerChoice === "scissors") ||
+        outcomeTxt.textContent = "It's a tie!"
+    }
+    else if((humanChoice === "rock" && computerChoice === "scissors") ||
                 (humanChoice === "paper" && computerChoice === "rock") ||
                 (humanChoice === "scissors" && computerChoice === "paper")){
                     humanScore ++;
-                    return `Human won`
+                    outcomeTxt.textContent = `You win! ${humanChoice} beats ${computerChoice}`;
             } else {
                 computerScore ++;
-                return `Computer won`
+                outcomeTxt.textContent = `You lose! ${computerChoice} beats ${humanChoice}`;
             }
-}
-
-const playGame = () => {
-    for(let i = 0; i < 5; i++){
-        console.log(`---Round ${i + 1}---`);
-        const humanSelection = getHumanChoice();
-        const computerSelection = getComputerChoice();
-        console.log("Human Choice:", humanSelection);
-        console.log("Computer Choice:", computerSelection);
-        console.log(playRound(humanSelection, computerSelection));
-        console.log(`Score -> Human: ${humanScore}, Computer: ${computerScore}`);
-    }
-    if (humanScore > computerScore) {
-        return "MATCH OVER: You are the ultimate champion!";
-    } else if (computerScore > humanScore) {
-        return "MATCH OVER: The machine has defeated you!";
-    } else {
-        return "MATCH OVER: It's a grand draw!";
+        scoreTxt.textContent = `Human: ${humanScore} | Computer: ${computerScore}`;
+        if (humanScore === 5) {
+        winnerTxt.textContent = "MATCH OVER: You are the ultimate champion!";
+    } else if (computerScore === 5) {
+        winnerTxt.textContent = "MATCH OVER: The machine has defeated you!";
     }
 }
-
-console.log(playGame());
